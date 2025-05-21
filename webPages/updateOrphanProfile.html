@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Update Orphan Profile</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="form-container">
+    <h2>Update Orphan Profile</h2>
+    <form id="updateOrphanForm">
+      <input type="text" id="orphanId" placeholder="Orphan ID" required>
+      <input type="text" id="education_status" placeholder="Education Status">
+      <input type="text" id="health_condition" placeholder="Health Condition">
+      <input type="text" id="profile_picture" placeholder="Profile Picture URL">
+      <button type="submit">Update Orphan</button>
+    </form>
+  </div>
+  <script>
+    document.getElementById('updateOrphanForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const token = localStorage.getItem('token');
+      const orphanId = document.getElementById('orphanId').value;
+
+      const res = await fetch(`http://localhost:3001/hopeconnect/admin/orphans/${orphanId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({
+          education_status: document.getElementById('education_status').value,
+          health_condition: document.getElementById('health_condition').value,
+          profile_picture: document.getElementById('profile_picture').value
+        })
+      });
+
+      const data = await res.json();
+      alert(data.message);
+    });
+  </script>
+</body>
+</html>

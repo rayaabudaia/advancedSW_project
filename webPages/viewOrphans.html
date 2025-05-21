@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Show All Orphans</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #eef2f7;
+      padding: 40px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .orphan-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .orphan-card {
+      background: white;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .orphan-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+    .orphan-card h3 {
+      margin: 10px 0 5px;
+    }
+  </style>
+</head>
+<body>
+  <h2>👁 Show All Orphans</h2>
+  <div class="orphan-list" id="orphanList">
+    
+  </div>
+  
+  </div>
+  <script>
+    window.addEventListener('DOMContentLoaded', async () => {
+      const list = document.querySelector('.orphan-list');
+    
+      try {
+        const res = await fetch('http://localhost:3001/hopeconnect/show/orphans');
+        const orphans = await res.json();
+    
+        orphans.forEach(orphan => {
+          const card = document.createElement('div');
+          card.className = 'orphan-card';
+          card.innerHTML = `
+            <img src="${orphan.profile_picture || 'https://via.placeholder.com/250x180'}" alt="Orphan">
+            <h3>${orphan.name}</h3>
+            <p>Age: ${orphan.age}</p>
+            <p>Health: ${orphan.health_condition || 'N/A'}</p>
+          `;
+          list.appendChild(card);
+        });
+      } catch (err) {
+        alert("Failed to load orphans: " + err.message);
+      }
+    });
+    async function loadOrphans() {
+        try {
+          const res = await fetch("http://localhost:3001/hopeconnect/show/orphans");
+          const orphans = await res.json();
+    
+          const orphanList = document.getElementById("orphanList");
+          orphanList.innerHTML = ""; // Clear any existing content
+    
+          orphans.forEach(orphan => {
+            const card = document.createElement("div");
+            card.className = "orphan-card";
+            card.innerHTML = `
+              <img src="${orphan.profile_picture || 'https://via.placeholder.com/250x180'}" alt="Orphan">
+              <h3>${orphan.name}</h3>
+              <p>Age: ${orphan.age}</p>
+              <p>Health: ${orphan.health_condition || 'N/A'}</p>
+            `;
+            orphanList.appendChild(card);
+          });
+        } catch (err) {
+          alert("Failed to load orphans: " + err.message);
+        }
+      }
+    
+      window.onload = loadOrphans;
+    </script>
+    
+</body>
+</html>

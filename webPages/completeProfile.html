@@ -1,0 +1,51 @@
+<!-- webPages/completeProfile.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Complete Profile</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="form-container">
+    <h2>Complete Your Profile</h2>
+    <form id="completeProfileForm">
+      <input type="text" id="address" placeholder="Address" required>
+      <input type="text" id="phone_number" placeholder="Phone Number" required>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    const userId = localStorage.getItem("user_id");
+    const token = localStorage.getItem("token");
+
+if (!token || !userId) {
+  alert("You're not logged in!");
+  window.location.href = "/webPages/login.html";
+}
+
+    document.getElementById('completeProfileForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const address = document.getElementById('address').value;
+      const phone_number = document.getElementById('phone_number').value;
+
+      const res = await fetch(`http://localhost:3001/hopeconnect/auth/profile/${userId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+        body: JSON.stringify({ address, phone_number })
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        alert("Profile completed successfully!");
+      } else {
+        alert(data.message || data.error);
+      }
+    });
+  </script>
+</body>
+</html>

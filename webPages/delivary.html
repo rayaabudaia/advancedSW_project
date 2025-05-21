@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Live Delivery Tracking</title>
+</head>
+<body>
+  <h2>Delivery Live Location Updates</h2>
+  <ul id="log"></ul>
+
+  <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+  <script>
+    const socket = io('http://localhost:3001'); // Adjust if hosted
+
+    // Receive broadcast location update
+    socket.on('locationUpdate', data => {
+      const log = document.getElementById("log");
+      const li = document.createElement("li");
+      li.textContent = `Delivery #${data.deliveryId} - Lat: ${data.latitude}, Lng: ${data.longitude}`;
+      log.appendChild(li);
+    });
+
+    // Example: Send fake updates every 5 seconds (simulate driver)
+    // Comment this block if just viewing
+    let lat = 31.9500, lng = 35.9333, id = 1;
+    setInterval(() => {
+      lat += 0.0001;
+      lng += 0.0001;
+      socket.emit('deliveryLocationUpdate', {
+        deliveryId: id,
+        latitude: lat.toFixed(8),
+        longitude: lng.toFixed(8)
+      });
+    }, 5000);
+  </script>
+</body>
+</html>

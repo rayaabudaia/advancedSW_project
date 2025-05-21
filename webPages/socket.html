@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Socket Test</title>
+  <script src="https://cdn.socket.io/4.7.1/socket.io.min.js"></script>
+</head>
+<body>
+  <h1>📡 Listening for orphan updates...</h1>
+  <div id="updates"></div>
+
+  <script>
+    const socket = io("http://localhost:3001");
+
+    socket.on("connect", () => {
+      console.log("Connected to socket server ✅");
+    });
+
+    socket.on("newUpdate", (data) => {
+      console.log("📢 New Update Received:", data);
+      const div = document.getElementById("updates");
+      div.innerHTML += `<p><strong>${data.type}:</strong> ${data.description} <br><img src="${data.image_url}" width="150"/></p>`;
+    });
+  </script>
+</body>
+</html>

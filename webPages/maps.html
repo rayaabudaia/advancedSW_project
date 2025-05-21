@@ -1,0 +1,35 @@
+<!-- public/distributionMap.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Delivery Tracker</title>
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+</head>
+<body>
+  <h2>Track Distribution</h2>
+  <div id="map" style="height: 500px; width: 100%;"></div>
+
+  <script>
+    const map = new google.maps.Map(document.getElementById("map"), {
+      zoom: 12,
+      center: { lat: 31.95, lng: 35.91 } // Default center (e.g., Amman)
+    });
+
+    const marker = new google.maps.Marker({
+      map,
+      position: { lat: 31.95, lng: 35.91 },
+      title: "Delivery Vehicle"
+    });
+
+    // Connect to Socket.IO
+    const socket = io("http://localhost:3001");
+
+    socket.on("distributionLocationUpdate", (data) => {
+      const { lat, lng } = data;
+      marker.setPosition({ lat, lng });
+      map.setCenter({ lat, lng });
+    });
+  </script>
+  <script src="/socket.io/socket.io.js"></script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Signup</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    
+    input, select {
+
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Sign Up</h2>
+    <form id="signupForm">
+      <input type="text" id="name" placeholder="Name" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="password" id="password" placeholder="Password" required>
+      
+      <select id="role" required>
+        <option value="" disabled selected>Select Role</option>
+        <option value="admin">Admin</option>
+        <option value="donor">Donor</option>
+        <option value="sponsor">Sponsor</option>
+        <option value="volunteer">Volunteer</option>
+      </select>
+      
+      <button type="submit">Sign Up</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const role = document.getElementById('role').value;
+      
+      const res = await fetch('http://localhost:3001/hopeconnect/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password, role })
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        alert("Signup successful! Please log in.");
+        window.location.href = "http://localhost:3001/login.html";
+      } else {
+        alert(data.message || "Signup failed.");
+      }
+    });
+  </script>
+</body>
+</html>

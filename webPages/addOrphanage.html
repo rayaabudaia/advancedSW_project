@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Orphanage</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .form-container {
+      background: #ffffff;
+      padding: 35px;
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      width: 400px;
+    }
+    h2 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    input, button {
+      width: 360px;
+      padding: 10px;
+      margin: 8px ;
+      margin-right: 500px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      width: 390px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>🏠 Add Orphanage</h2>
+    <form id="addOrphanageForm">
+      <input type="text" placeholder="Name" required>
+      <input type="text" placeholder="Location" required>
+      <input type="text" placeholder="Phone Number">
+      <input type="email" placeholder="Email" required>
+      <input type="text" placeholder="Manager Name">
+      <input type="text" placeholder="Verification Proof URL">
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+  <script>
+    document.getElementById('addOrphanageForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+    
+      const orphanage = {
+        name: document.querySelector('#addOrphanageForm input[placeholder="Name"]').value,
+        location: document.querySelector('#addOrphanageForm input[placeholder="Location"]').value,
+        phone_number: document.querySelector('#addOrphanageForm input[placeholder="Phone Number"]').value,
+        email: document.querySelector('#addOrphanageForm input[placeholder="Email"]').value,
+        manager_name: document.querySelector('#addOrphanageForm input[placeholder="Manager Name"]').value,
+        ads: document.querySelector('#addOrphanageForm input[placeholder="Ads"]').value,
+        ads_category: document.querySelector('#addOrphanageForm input[placeholder="Ads Category"]').value,
+        verification_proof: document.querySelector('#addOrphanageForm input[placeholder="Verification Proof URL"]').value
+      };
+    
+      try {
+        const res = await fetch('http://localhost:3001/hopeconnect/admin/orphange', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orphanage)
+        });
+        const data = await res.json();
+        alert(data.message || "Orphanage added successfully.");
+       
+      } catch (err) {
+        alert("Error adding orphanage: " + err.message);
+      }
+    });
+    </script>
+    
+</body>
+</html>

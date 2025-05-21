@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Orphan</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .form-container {
+      background: white;
+      padding: 50px;
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      width: 350px;
+    }
+    h2 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 20px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      width: 380px;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>➕ Add Orphan</h2>
+    <form id="addOrphanForm">
+      <input type="text" placeholder="Name" required>
+      <input type="number" placeholder="Age" required>
+      <input type="text" placeholder="Education Status">
+      <input type="text" placeholder="Health Condition">
+      <input type="text" placeholder="Gender">
+      <input type="text" placeholder="Profile Picture URL">
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+  <script>
+    document.getElementById('addOrphanForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+    
+      const orphan = {
+        name: document.querySelector('#addOrphanForm input[placeholder="Name"]').value,
+        age: parseInt(document.querySelector('#addOrphanForm input[placeholder="Age"]').value),
+        education_status: document.querySelector('#addOrphanForm input[placeholder="Education Status"]').value,
+        health_condition: document.querySelector('#addOrphanForm input[placeholder="Health Condition"]').value,
+        gender: document.querySelector('#addOrphanForm input[placeholder="Gender"]').value,
+        profile_picture: document.querySelector('#addOrphanForm input[placeholder="Profile Picture URL"]').value
+      };
+    
+      try {
+        const res = await fetch('http://localhost:3001/hopeconnect/admin/orphans', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orphan)
+        });
+        const data = await res.json();
+        alert(data.message || "Orphan added successfully.");
+        window.location.href = "http://localhost:3001/updateOrphanProfile.html";
+      } catch (err) {
+        alert("Error adding orphan: " + err.message);
+      }
+    });
+    </script>
+</body>
+</html>
